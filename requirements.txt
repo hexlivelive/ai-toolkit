@@ -1,6 +1,3 @@
-torch
-torchvision
-safetensors
 git+https://github.com/huggingface/diffusers.git
 transformers
 lycoris-lora==1.8.3
