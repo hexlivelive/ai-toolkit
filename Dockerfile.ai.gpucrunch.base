@@ -1,0 +1,37 @@
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
+
+
+WORKDIR /app
+
+RUN mkdir -p /app
+
+RUN apt update
+
+# PIP COnfiguration
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    # Allow statements and log messages to immediately appear
+    PYTHONUNBUFFERED=1 \
+    # disable a pip version check to reduce run-time & log-spam
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    # cache is useless in docker image, so disable to reduce image size
+    PIP_NO_CACHE_DIR=1
+
+# Install git
+RUN apt install git 
+RUN apt install nano 
+
+
+RUN pip3 install --upgrade pip
+
+RUN pip3 install virtualenv  --find-links=/app/ai-toolkit/dependencies
+RUN pip3 install poetry  --find-links=/app/ai-toolkit/dependencies
+RUN pip3 install "huggingface_hub[cli]"  --find-links=/app/ai-toolkit/dependencies  
+RUN pip3 install wandb  --find-links=/app/ai-toolkit/dependencies
+
+RUN echo "Step 1: Checking Python version..." && python3 --version
+
+
+
+
+
+
