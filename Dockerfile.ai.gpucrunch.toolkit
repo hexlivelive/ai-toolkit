@@ -1,32 +1,28 @@
-FROM hexlive/ai_gpucrunch_base:latest AS builder
-WORKDIR /app/ai-toolkit
-
-RUN huggingface-cli login --token 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
-
-# These are needed for the pip install to work
-RUN apt-get install pkg-config -y
-RUN apt-get install libcairo2-dev -y
-RUN apt-get install -y tmux nvtop htop
-
-COPY . .
-
-RUN chmod -R 755 /app/ai-toolkit/dependencies
-
-RUN echo "Creating Virtual Environment"
-RUN python3 -m venv venv
-RUN source venv/bin/activate
-
-RUN echo "Installing Requirements"
-RUN pip3 install absl-py==2.1.0 --find-links=/app/ai-toolkit/dependencies
-RUN pip3 install torch==2.1.0+cu118 --find-links=/app/ai-toolkit/dependencies #-f https://download.pytorch.org/whl/torch_stable.html
-RUN pip3 install torchvision==0.16.0+cu118 --find-links=/app/ai-toolkit/dependencies #-f https://download.pytorch.org/whl/torch_stable.html
-RUN pip3 install --upgrade diffusers[torch]==0.31.0 --find-links=/app/ai-toolkit/dependencies
-
 FROM hexlive/ai_gpucrunch_base:latest
 WORKDIR /app/ai-toolkit
 
-COPY --from=builder /app/ai-toolkit/ .
-#RUN python -m pip install
-RUN pip3 install -vv -r requirements.locked.txt --find-links=/app/ai-toolkit/dependencies
+RUN apt remove -y python3-blinker
 
-RUN rm -rf /root/.cache
+COPY . .
+
+ENV VIRTUAL_ENV=/app/ai-toolkit/venv
+
+RUN python3 -m venv $VIRTUAL_ENV && \
+    source venv/bin/activate && \
+    which python && \
+    python --version
+
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN pip install huggingface_hub[cli]==0.25.2 && \
+pip install pip-tools && \
+    pip-compile requirements.in --pip-args "--ignore-installed --no-cache-dir --retries 5 --timeout 15" && \
+    pip-sync requirements.txt
+
+
+# FROM hexlive/ai_gpucrunch_base:latest
+# WORKDIR /app/ai-toolkit
+
+# COPY --from=builder /app/ai-toolkit/ .
+
+# RUN rm -rf /root/.cache

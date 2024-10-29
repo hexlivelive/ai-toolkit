@@ -1,4 +1,4 @@
-FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
+FROM runpod/base:0.6.2-cuda12.2.0
 
 
 WORKDIR /app
@@ -17,18 +17,17 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_NO_CACHE_DIR=1
 
 # Install git
-RUN apt install git 
-RUN apt install nano 
+RUN apt-get install git -y && \
+    apt-get install nano -y \
+    apt-get install pkg-config -y && \
+    apt-get install libcairo2-dev -y && \
+    apt-get install tmux nvtop htop -y
 
+RUN pip3 install --upgrade pip && \
+    pip3 --no-cache-dir install virtualenv && \
+    pip3 --no-cache-dir install poetry && \
+    pip3 --no-cache-dir install wandb  
 
-RUN pip3 install --upgrade pip
-
-RUN pip3 install virtualenv  --find-links=/app/ai-toolkit/dependencies
-RUN pip3 install poetry  --find-links=/app/ai-toolkit/dependencies
-RUN pip3 install "huggingface_hub[cli]"  --find-links=/app/ai-toolkit/dependencies  
-RUN pip3 install wandb  --find-links=/app/ai-toolkit/dependencies
-
-RUN echo "Step 1: Checking Python version..." && python3 --version
 
 
 
