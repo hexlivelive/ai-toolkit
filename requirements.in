@@ -19,5 +19,7 @@ optimum.quanto
 open_clip_torch
 k_diffusion
 hf_transfer
+bitsandbytes
+mediapipe
 
 

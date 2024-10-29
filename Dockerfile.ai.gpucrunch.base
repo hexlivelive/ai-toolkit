@@ -5,7 +5,7 @@ WORKDIR /app
 
 RUN mkdir -p /app
 
-RUN apt update
+RUN apt-get update
 
 # PIP COnfiguration
 ENV PIP_DEFAULT_TIMEOUT=100 \
@@ -18,8 +18,8 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 # Install git
 RUN apt-get install git -y && \
-    apt-get install nano -y \
-    apt-get install pkg-config -y && \
+    apt-get install nano -y && \
+    apt-get install pkgconf -y && \
     apt-get install libcairo2-dev -y && \
     apt-get install tmux nvtop htop -y
 
