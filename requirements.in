@@ -21,5 +21,6 @@ k_diffusion
 hf_transfer
 bitsandbytes
 mediapipe
+sentencepiece
 
 

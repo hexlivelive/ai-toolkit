@@ -33,8 +33,6 @@ buildImage() {
   echo "Done building, tagging, and pushing $REPOSITORY_URL/$CONTAINER_NAME:$VERSION"
 }
 
-DOCKER_ACCESS_TOKEN=""
-
 if [ "$CI" = "true" ]; then
   echo "Running in CI. Getting secrets from env variables"
 else
@@ -42,7 +40,7 @@ else
 fi
 
 echo "Logging into dockerhub registry"
-docker login -u hexlive -p $DOCKER_HUB_TOKEN
+docker login -u hexlive -p dckr_pat_5ePKMenXjzNWXRwN31SrXRfCE0k
 echo "Logged in"
 
 buildImage Dockerfile.ai.gpucrunch.base ai_gpucrunch_base
