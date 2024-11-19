@@ -1811,6 +1811,9 @@ class BaseSDTrainProcess(BaseTrainProcess):
                 # commit log
                 self.logger.commit(step=self.step_num)
 
+                progress = round(step * 100 / 3000, 2)
+                print(f"Current progress: {progress}")
+
                 # sets progress bar to match out step
                 self.progress_bar.update(step - self.progress_bar.n)
 
